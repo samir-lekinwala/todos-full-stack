@@ -1,7 +1,8 @@
 import React from 'react'
-import { getAllTasks } from '../apis/tasksapi'
+import { getAllTasksApi } from '../apis/tasksapi'
 import { useQuery } from '@tanstack/react-query'
-import { Task } from '../models/Tasks'
+import * as models from '../models/TasksModel'
+import Task from './Task.tsx'
 
 function MainSection() {
   const {
@@ -11,7 +12,7 @@ function MainSection() {
     error,
   } = useQuery({
     queryKey: ['tasks'],
-    queryFn: getAllTasks,
+    queryFn: getAllTasksApi,
   })
   if (isLoading) return <h1>Loading...</h1>
   if (isError) return console.error(error)
@@ -35,16 +36,7 @@ function MainSection() {
             <input className="edit" value="Create a TodoMVC template" />
           </li>
           {/* Task that are yet to be completed */}
-          {tasks.map((task: Task) => (
-            <li key={task.id}>
-              <div className="view">
-                <input className="toggle" type="checkbox" />
-                <label>{task.task}</label>
-                <button className="destroy"></button>
-              </div>
-              <input className="edit" value="Rule the web" />
-            </li>
-          ))}
+          <Task tasks={tasks} />
         </ul>
       </section>
     </>

@@ -1,4 +1,4 @@
-import { UpdateTask } from '../../client/models/Tasks.js'
+import { UpdateTask } from '../../client/models/TasksModel.js'
 import knexfile from './knexfile.js'
 import knex from 'knex'
 

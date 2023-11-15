@@ -12,3 +12,7 @@ export interface UpdateTask {
   task_Details: string
   completed: boolean
 }
+
+export interface NewTask {
+  task: string
+}

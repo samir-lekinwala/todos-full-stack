@@ -1,9 +1,24 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { addTodoApi } from '../apis/tasksapi'
+import { NewTask } from '../models/TasksModel'
+
 // eslint-disable-next-line no-unused-vars
 function AddTodo() {
-  function handleSubmit(e) {
+  const mutateAddTask = useMutation({
+    mutationFn: (task: NewTask) => addTodoApi(task),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['tasks'])
+    },
+  })
+
+  const queryClient = useQueryClient()
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const result = e.target
-    console.log(result)
+    const form = new FormData(e.currentTarget)
+    const task = form.get('newTodo')?.valueOf() as string
+    mutateAddTask.mutate({ task })
+    console.log(task)
   }
 
   return (
