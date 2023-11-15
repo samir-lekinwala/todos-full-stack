@@ -3,7 +3,7 @@ export function up(knex) {
     table.increments('id').primary()
     table.integer('priority')
     table.string('task')
-    table.string('task_Details')
+    table.string('taskDetails')
     table.boolean('completed')
   })
 }

@@ -5,31 +5,31 @@ export async function seed(knex) {
     {
       priority: '3',
       task: 'Eat KFC',
-      task_Details: 'Booked for 12pm with friend.',
+      taskDetails: 'Booked for 12pm with friend.',
       completed: false,
     },
     {
       priority: '5',
       task: 'Play golf',
-      task_Details: 'Booked for 8am Sunday.',
+      taskDetails: 'Booked for 8am Sunday.',
       completed: false,
     },
     {
       priority: '2',
       task: 'Do laundry',
-      task_Details: 'Do laundry on Sunday at 7am.',
+      taskDetails: 'Do laundry on Sunday at 7am.',
       completed: false,
     },
     {
       priority: '1',
       task: 'Mow lawns',
-      task_Details: 'Mow lawns at 6am.',
+      taskDetails: 'Mow lawns at 6am.',
       completed: false,
     },
     {
       priority: '4',
       task: 'Cook dinner',
-      task_Details: 'Making noodles for dinner',
+      taskDetails: 'Making noodles for dinner',
       completed: false,
     },
   ])
@@ -38,5 +38,5 @@ export async function seed(knex) {
 // table.increments('id').primary()
 // table.integer('priority')
 // table.string('task')
-// table.string('task_Details')
+// table.string('taskDetails')
 // table.boolean('completed')
