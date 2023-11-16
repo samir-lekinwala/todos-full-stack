@@ -28,7 +28,7 @@ router.patch('/:id', async (req, res) => {
   const data = req.body
   // console.log(data)
   try {
-    await updateTodo(id, data)
+    await updateTodo({ data })
     res.sendStatus(200)
   } catch (error) {
     console.error(error)

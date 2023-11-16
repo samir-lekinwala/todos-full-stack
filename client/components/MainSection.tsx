@@ -31,15 +31,15 @@ function MainSection() {
             <div className="view">
               {tasks.map((task: models.Task) =>
                 task.completed ? (
-                  <>
+                  <div key={task.id}>
                     <input className="toggle" type="checkbox" checked />
                     <label>{task.task}</label>
                     <button className="destroy"></button>
-                  </>
+                  </div>
                 ) : null
               )}
             </div>
-            <input className="edit" value="Create a TodoMVC template" />
+            {/* <input className="edit" value="Create a TodoMVC template" /> */}
           </li>
           {/* Task that are yet to be completed */}
           <Task tasks={tasks} />

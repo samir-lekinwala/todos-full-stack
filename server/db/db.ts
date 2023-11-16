@@ -1,6 +1,7 @@
 import { UpdateTask } from '../../client/models/TasksModel.js'
 import knexfile from './knexfile.js'
 import knex from 'knex'
+import * as models from '../../client/models/TasksModel.js'
 
 const db = knex(knexfile.development)
 
@@ -14,8 +15,9 @@ export function getTaskById(id: number) {
 export function deleteTodo(id: number) {
   return db('tasks').where('id', id).delete()
 }
-export function updateTodo(id: number, data: UpdateTask) {
-  return db('tasks').where('id', id).update(data)
+export function updateTodo({ data }: { data: models.Task }) {
+  console.log(data)
+  return db('tasks').where('id', data.id).update(data)
 }
 export function addTodo(data: UpdateTask) {
   return db('tasks').insert(data)

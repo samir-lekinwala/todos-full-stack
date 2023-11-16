@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import * as models from '../models/TasksModel'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteTaskApi, updateTodoApi } from '../apis/tasksapi'
@@ -9,7 +9,8 @@ interface Props {
 }
 
 function Task(prop: Props) {
-  // const [deleteButton, setDeleteButton] = useState('')
+  // const [editMode, setEditMode] = useState(false)
+
   const mutateDeleteTask = useMutation({
     mutationFn: (id: number) => deleteTaskApi(id),
     onSuccess: () => {
@@ -17,8 +18,7 @@ function Task(prop: Props) {
     },
   })
   const mutateCompleteTask = useMutation({
-    mutationFn: (id: number, completedStatus: models.Completed) =>
-      updateTodoApi(id, completedStatus),
+    mutationFn: (completedTask: models.Task) => updateTodoApi(completedTask),
     onSuccess: () => {
       queryClient.invalidateQueries(['tasks'])
     },
@@ -33,19 +33,22 @@ function Task(prop: Props) {
     mutateDeleteTask.mutate(id)
   }
 
-  function handleCompleteClick(e, id) {
-    const completedStatus = { completed: true }
-    mutateCompleteTask.mutate(id, completedStatus)
-    // e.preventDefault()
-    console.log(e.currentTarget)
+  function handleCompleteClick(task: models.Task) {
+    const completedTask = { ...task, completed: true }
+    mutateCompleteTask.mutate(completedTask)
   }
+
+  // function handleEditClick() {
+  //   setEditMode(!editMode)
+  //   console.log(editMode)
+  // }
 
   return allTasks.map((task: models.Task) =>
     task.completed == false ? (
       <li key={task.id}>
         <div className="view">
           <input
-            onClick={handleCompleteClick}
+            onClick={() => handleCompleteClick(task)}
             className="toggle"
             type="checkbox"
           />
