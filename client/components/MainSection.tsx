@@ -1,8 +1,8 @@
-import React from 'react'
+// import React from 'react'
 import { getAllTasksApi } from '../apis/tasksapi'
 import { useQuery } from '@tanstack/react-query'
 import * as models from '../models/TasksModel'
-import Task from './Task.tsx'
+import Tasks from './Tasks.tsx'
 
 function MainSection() {
   const {
@@ -42,7 +42,7 @@ function MainSection() {
             {/* <input className="edit" value="Create a TodoMVC template" /> */}
           </li>
           {/* Task that are yet to be completed */}
-          <Task tasks={tasks} />
+          <Tasks tasks={tasks} />
         </ul>
       </section>
     </>
