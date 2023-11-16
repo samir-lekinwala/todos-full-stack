@@ -29,9 +29,15 @@ function MainSection() {
           {/* If the task is completed */}
           <li className="completed">
             <div className="view">
-              <input className="toggle" type="checkbox" checked />
-              <label>Taste JavaScript</label>
-              <button className="destroy"></button>
+              {tasks.map((task: models.Task) =>
+                task.completed ? (
+                  <>
+                    <input className="toggle" type="checkbox" checked />
+                    <label>{task.task}</label>
+                    <button className="destroy"></button>
+                  </>
+                ) : null
+              )}
             </div>
             <input className="edit" value="Create a TodoMVC template" />
           </li>

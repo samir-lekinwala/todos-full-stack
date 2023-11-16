@@ -26,19 +26,21 @@ function Task(prop: Props) {
     mutateDeleteTask.mutate(id)
   }
 
-  return allTasks.map((task: models.Task) => (
-    <li key={task.id}>
-      <div className="view">
-        <input className="toggle" type="checkbox" />
-        <label>{task.task}</label>
-        <button
-          onClick={(e) => handleClick(e, task.id)}
-          className="destroy"
-        ></button>
-      </div>
-      <input className="edit" value="Rule the web" />
-    </li>
-  ))
+  return allTasks.map((task: models.Task) =>
+    task.completed == false ? (
+      <li key={task.id}>
+        <div className="view">
+          <input className="toggle" type="checkbox" />
+          <label>{task.task}</label>
+          <button
+            onClick={(e) => handleClick(e, task.id)}
+            className="destroy"
+          ></button>
+        </div>
+        <input className="edit" value="Rule the web" />
+      </li>
+    ) : null
+  )
 }
 
 export default Task
