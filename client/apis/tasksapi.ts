@@ -1,5 +1,5 @@
 import request from 'superagent'
-import { NewTask } from '../models/TasksModel'
+import { Completed, NewTask } from '../models/TasksModel'
 
 export async function getAllTasksApi() {
   const response = await request.get('/api/v1/todos')
@@ -9,6 +9,13 @@ export async function getAllTasksApi() {
 export async function addTodoApi(task: NewTask) {
   try {
     await request.post('/api/v1/todos/').send(task)
+  } catch (error) {
+    console.error(error)
+  }
+}
+export async function updateTodoApi(id: number, completedStatus: Completed) {
+  try {
+    await request.patch(`/api/v1/todos/${id}`).send(completedStatus)
   } catch (error) {
     console.error(error)
   }

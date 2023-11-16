@@ -1,7 +1,7 @@
 import React from 'react'
 import * as models from '../models/TasksModel'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteTaskApi } from '../apis/tasksapi'
+import { deleteTaskApi, updateTodoApi } from '../apis/tasksapi'
 // import e from 'express'
 
 interface Props {
@@ -16,6 +16,13 @@ function Task(prop: Props) {
       queryClient.invalidateQueries(['tasks'])
     },
   })
+  const mutateCompleteTask = useMutation({
+    mutationFn: (id: number, completedStatus: models.Completed) =>
+      updateTodoApi(id, completedStatus),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['tasks'])
+    },
+  })
 
   const queryClient = useQueryClient()
 
@@ -26,11 +33,22 @@ function Task(prop: Props) {
     mutateDeleteTask.mutate(id)
   }
 
+  function handleCompleteClick(e, id) {
+    const completedStatus = { completed: true }
+    mutateCompleteTask.mutate(id, completedStatus)
+    // e.preventDefault()
+    console.log(e.currentTarget)
+  }
+
   return allTasks.map((task: models.Task) =>
     task.completed == false ? (
       <li key={task.id}>
         <div className="view">
-          <input className="toggle" type="checkbox" />
+          <input
+            onClick={handleCompleteClick}
+            className="toggle"
+            type="checkbox"
+          />
           <label>{task.task}</label>
           <button
             onClick={(e) => handleClick(e, task.id)}

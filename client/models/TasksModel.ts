@@ -16,3 +16,7 @@ export interface UpdateTask {
 export interface NewTask {
   task: string
 }
+
+export interface Completed {
+  completed: boolean
+}
