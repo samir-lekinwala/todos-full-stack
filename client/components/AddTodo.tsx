@@ -17,8 +17,10 @@ function AddTodo() {
     e.preventDefault()
     const form = new FormData(e.currentTarget)
     const task = form.get('newTodo')?.valueOf() as string
-    mutateAddTask.mutate({ task })
-    console.log(task)
+    const newTodo = { task: task, completed: false }
+
+    mutateAddTask.mutate(newTodo)
+    e.currentTarget.reset()
   }
 
   return (
@@ -27,7 +29,7 @@ function AddTodo() {
         <input
           className="new-todo"
           placeholder="What needs to be done?"
-          autoFocus={true}
+          // autoFocus={true}
           name="newTodo"
         />
       </form>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import * as models from '../models/TasksModel'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteTaskApi } from '../apis/tasksapi'
@@ -21,16 +21,9 @@ function Task(prop: Props) {
 
   const allTasks = prop.tasks
 
-  async function handleClick(
-    e: React.MouseEvent<HTMLButtonElement>,
-    id: number
-  ) {
+  function handleClick(e: React.MouseEvent<HTMLButtonElement>, id: number) {
     e.preventDefault()
-    // console.log(e)
     mutateDeleteTask.mutate(id)
-    console.log(id)
-    // setDeleteButton(id)
-    // console.log(deleteButton)
   }
 
   return allTasks.map((task: models.Task) => (
