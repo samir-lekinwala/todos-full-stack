@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as models from '../models/TasksModel'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteTaskApi, updateTodoApi } from '../apis/tasksapi'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { deleteTaskApi, getAllTasksApi, updateTodoApi } from '../apis/tasksapi'
 // import e from 'express'
 
 interface Props {
@@ -9,7 +9,9 @@ interface Props {
 }
 
 function Task(prop: Props) {
+  // const [allTasks, setAllTask] = useState(prop.tasks)
   const [editMode, setEditMode] = useState(false)
+  const [edittedTask, setEdittedTask] = useState('')
 
   const mutateDeleteTask = useMutation({
     mutationFn: (id: number) => deleteTaskApi(id),
@@ -19,6 +21,12 @@ function Task(prop: Props) {
   })
   const mutateCompleteTask = useMutation({
     mutationFn: (completedTask: models.Task) => updateTodoApi(completedTask),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['tasks'])
+    },
+  })
+  const mutateUpdateTask = useMutation({
+    mutationFn: (updatedTask: models.Task) => updateTodoApi(updatedTask),
     onSuccess: () => {
       queryClient.invalidateQueries(['tasks'])
     },
@@ -38,38 +46,67 @@ function Task(prop: Props) {
     mutateCompleteTask.mutate(completedTask)
   }
 
-  function handleEditClick() {
-    setEditMode(!editMode)
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    const form = new FormData(e.currentTarget)
+    const task = form.get('edittedTaskValue')?.valueOf() as string
+    const updatedTask = { ...edittedTask, task }
+    mutateUpdateTask.mutate(updatedTask)
+    e.currentTarget.reset()
+    setEditMode(false)
+    // setEdittedTask(updatedTask)
+    // await updateTodoApi(updatedTask)
   }
 
-  return allTasks.map((task: models.Task) =>
-    task.completed == false ? (
-      <div key={task.id}>
-        <Task
-          key={task.id}
-          tasks={task}
-          handleCompleteClick={handleCompleteClick}
-          handleEditClick={handleEditClick}
-          handleClick={handleClick}
-        />
-      </div>
-    ) : // <li key={task.id}>
-    //   <div className="view">
-    //     <input
-    //       onClick={() => handleCompleteClick(task)}
-    //       className="toggle"
-    //       type="checkbox"
-    //     />
-    //     {/* {editMode ? <input></input> : <p>hello</p>} */}
-    //     <label onDoubleClick={handleEditClick}>{task.task}</label>
-    //     <button
-    //       onClick={(e) => handleClick(e, task.id)}
-    //       className="destroy"
-    //     ></button>
-    //   </div>
-    //   <input className="edit" value="Rule the web" />
-    // </li>
-    null
+  function handleEditClick(task) {
+    setEditMode(!editMode)
+    setEdittedTask(task)
+    console.log(task.id)
+  }
+
+  function createMappedData() {
+    return allTasks.map((task: models.Task) =>
+      task.completed == false ? (
+        <div key={task.id}>
+          <li key={task.id}>
+            <div className="view">
+              <input
+                onClick={() => handleCompleteClick(task)}
+                className="toggle"
+                type="checkbox"
+              />
+              <label onDoubleClick={() => handleEditClick(task)}>
+                {task.task}
+              </label>
+              <button
+                onClick={(e) => handleClick(e, task.id)}
+                className="destroy"
+              ></button>
+            </div>
+            <input className="edit" value="Rule the web" />
+          </li>
+        </div>
+      ) : null
+    )
+  }
+
+  // console.log(allTasks)
+  return editMode ? (
+    <>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="edittedTaskValue">Edit your task</label>
+        <input
+          className="new-todo"
+          onDoubleClick={() => setEditMode(!editMode)}
+          id="edittedTaskValue"
+          name="edittedTaskValue"
+        ></input>
+      </form>
+
+      {createMappedData()}
+    </>
+  ) : (
+    createMappedData()
   )
 }
 

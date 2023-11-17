@@ -2,21 +2,27 @@ import { useQuery } from '@tanstack/react-query'
 import { getAllTasksApi } from '../apis/tasksapi'
 import { Task } from '../models/TasksModel'
 
-function Footer() {
-  const {
-    data: tasks,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ['tasks'],
-    queryFn: getAllTasksApi,
-  })
-  if (isLoading) return <h1>Loading...</h1>
-  if (isError) return console.error(error)
+interface Props {
+  tasks: Task
+}
+
+function Footer(props: Props) {
+  const data = props.tasks
+  console.log(data)
+  // const {
+  //   data: tasks,
+  //   isLoading,
+  //   isError,
+  //   error,
+  // } = useQuery({
+  //   queryKey: ['tasks'],
+  //   queryFn: getAllTasksApi,
+  // })
+  // if (isLoading) return <h1>Loading...</h1>
+  // if (isError) return console.error(error)
 
   function taskRemaining() {
-    const filtered = tasks.filter((x: Task) => x.completed == false)
+    const filtered = data.filter((x: Task) => x.completed == false)
     return filtered.length
   }
   taskRemaining()

@@ -1,19 +1,24 @@
 import React from 'react'
-interface Props {}
+import { Task } from '../models/TasksModel'
+interface Props {
+  tasks: Task
+}
 
 function Task(prop: Props) {
+  const tasks = prop.tasks
+  // const { tasks, handleCompleteClick, handleEditClick, handleClick } = prop
   return (
     <li key={prop.tasks.id}>
       <div className="view">
         <input
-          onClick={() => prop.handleCompleteClick(prop.tasks)}
+          onClick={() => handleCompleteClick(tasks)}
           className="toggle"
           type="checkbox"
         />
         {/* {editMode ? <input></input> : <p>hello</p>} */}
-        <label onDoubleClick={prop.handleEditClick}>{prop.tasks.task}</label>
+        <label onDoubleClick={handleEditClick}>{tasks.task}</label>
         <button
-          onClick={(e) => prop.handleClick(e, prop.tasks.id)}
+          onClick={(e) => handleClick(e, tasks.id)}
           className="destroy"
         ></button>
       </div>

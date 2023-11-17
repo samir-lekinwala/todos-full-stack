@@ -4,18 +4,24 @@ import { useQuery } from '@tanstack/react-query'
 import * as models from '../models/TasksModel'
 import Tasks from './Tasks.tsx'
 
-function MainSection() {
-  const {
-    data: tasks,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ['tasks'],
-    queryFn: getAllTasksApi,
-  })
-  if (isLoading) return <h1>Loading...</h1>
-  if (isError) return console.error(error)
+interface Props {
+  tasks: models.Task
+}
+
+function MainSection(props: Props) {
+  const tasks = props.tasks
+
+  // const {
+  //   data: tasks,
+  //   isLoading,
+  //   isError,
+  //   error,
+  // } = useQuery({
+  //   queryKey: ['tasks'],
+  //   queryFn: getAllTasksApi,
+  // })
+  // if (isLoading) return <h1>Loading...</h1>
+  // if (isError) return console.error(error)
 
   return (
     <>
@@ -42,7 +48,7 @@ function MainSection() {
             {/* <input className="edit" value="Create a TodoMVC template" /> */}
           </li>
           {/* Task that are yet to be completed */}
-          <Tasks tasks={tasks} />
+          <Tasks tasks={props.tasks} />
         </ul>
       </section>
     </>

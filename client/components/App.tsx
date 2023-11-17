@@ -1,8 +1,22 @@
+import { useQuery } from '@tanstack/react-query'
 import AddTodo from './AddTodo.tsx'
 import Footer from './Footer.tsx'
 import MainSection from './MainSection.tsx'
+import { getAllTasksApi } from '../apis/tasksapi.ts'
 
 function App() {
+  const {
+    data: tasks,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['tasks'],
+    queryFn: getAllTasksApi,
+  })
+  if (isLoading) return <h1>Loading...</h1>
+  if (isError) return console.error(error)
+
   return (
     <>
       <header className="header">
@@ -11,11 +25,11 @@ function App() {
       </header>
       <>
         {/* <section className="main"> */}
-        <MainSection />
+        <MainSection tasks={tasks} />
       </>
       {/* </section> */}
       {/* <footer className="footer"></footer> */}
-      <Footer />
+      <Footer tasks={tasks} />
     </>
   )
 }
