@@ -19,12 +19,14 @@ function Task(prop: Props) {
       queryClient.invalidateQueries(['tasks'])
     },
   })
+
   const mutateCompleteTask = useMutation({
     mutationFn: (completedTask: models.Task) => updateTodoApi(completedTask),
     onSuccess: () => {
       queryClient.invalidateQueries(['tasks'])
     },
   })
+
   const mutateUpdateTask = useMutation({
     mutationFn: (updatedTask: models.Task) => updateTodoApi(updatedTask),
     onSuccess: () => {
@@ -96,10 +98,11 @@ function Task(prop: Props) {
       <form onSubmit={handleSubmit}>
         <label htmlFor="edittedTaskValue">Edit your task</label>
         <input
-          className="new-todo"
+          className="new-todo currentlyEditting"
           onDoubleClick={() => setEditMode(!editMode)}
           id="edittedTaskValue"
           name="edittedTaskValue"
+          defaultValue={edittedTask.task}
         ></input>
       </form>
 

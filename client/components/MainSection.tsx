@@ -1,27 +1,40 @@
 // import React from 'react'
-import { getAllTasksApi } from '../apis/tasksapi'
-import { useQuery } from '@tanstack/react-query'
+import { getAllTasksApi, updateTodoApi } from '../apis/tasksapi'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as models from '../models/TasksModel'
 import Tasks from './Tasks.tsx'
+import { useState } from 'react'
 
 interface Props {
   tasks: models.Task
 }
 
 function MainSection(props: Props) {
+  const [currentTask, setCurrentTask] = useState()
+
   const tasks = props.tasks
 
-  // const {
-  //   data: tasks,
-  //   isLoading,
-  //   isError,
-  //   error,
-  // } = useQuery({
-  //   queryKey: ['tasks'],
-  //   queryFn: getAllTasksApi,
+  // const [check, setChecked] = useState(false)
+
+  // const mutateUpdateTask = useMutation({
+  //   mutationFn: (updatedTask: models.Task) => updateTodoApi(updatedTask),
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries(['tasks'])
+  //   },
   // })
-  // if (isLoading) return <h1>Loading...</h1>
-  // if (isError) return console.error(error)
+
+  const queryClient = useQueryClient()
+
+  // function handleCheck(task: models.Task) {
+  //   // e.preventDefault()
+  //   setCurrentTask(task)
+  //   console.log(currentTask?.id)
+  //   // console.log(currentTask)
+
+  //   // mutateUpdateTask.mutate()
+  //   // console.log('check check')
+  //   // setChecked(!check)
+  // }
 
   return (
     <>
@@ -38,7 +51,12 @@ function MainSection(props: Props) {
               {tasks.map((task: models.Task) =>
                 task.completed ? (
                   <div key={task.id}>
-                    <input className="toggle" type="checkbox" checked />
+                    <input
+                      // onClick={() => handleCheck(task)}
+                      className="toggle"
+                      type="checkbox"
+                      checked
+                    />
                     <label>{task.task}</label>
                     <button className="destroy"></button>
                   </div>
