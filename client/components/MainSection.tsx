@@ -1,27 +1,12 @@
-// import React from 'react'
-import { getAllTasksApi } from '../apis/tasksapi'
-import { useQuery } from '@tanstack/react-query'
 import * as models from '../models/TasksModel'
 import Tasks from './Tasks.tsx'
 
 interface Props {
-  tasks: models.Task
+  tasks: models.Task[]
 }
 
 function MainSection(props: Props) {
   const tasks = props.tasks
-
-  // const {
-  //   data: tasks,
-  //   isLoading,
-  //   isError,
-  //   error,
-  // } = useQuery({
-  //   queryKey: ['tasks'],
-  //   queryFn: getAllTasksApi,
-  // })
-  // if (isLoading) return <h1>Loading...</h1>
-  // if (isError) return console.error(error)
 
   return (
     <>
@@ -34,21 +19,11 @@ function MainSection(props: Props) {
 
           {/* If the task is completed */}
           <li className="completed">
-            <div className="view">
-              {tasks.map((task: models.Task) =>
-                task.completed ? (
-                  <div key={task.id}>
-                    <input className="toggle" type="checkbox" checked />
-                    <label>{task.task}</label>
-                    <button className="destroy"></button>
-                  </div>
-                ) : null
-              )}
-            </div>
+            <div className="view"></div>
             {/* <input className="edit" value="Create a TodoMVC template" /> */}
           </li>
           {/* Task that are yet to be completed */}
-          <Tasks tasks={props.tasks} />
+          <Tasks tasks={tasks} />
         </ul>
       </section>
     </>

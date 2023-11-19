@@ -24,7 +24,6 @@ router.delete('/:id', async (req, res) => {
   }
 })
 router.patch('/:id', async (req, res) => {
-  const id = Number(req.params.id)
   const data = req.body
   // console.log(data)
   try {

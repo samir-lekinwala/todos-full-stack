@@ -1,17 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import * as models from '../models/TasksModel'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { deleteTaskApi, getAllTasksApi, updateTodoApi } from '../apis/tasksapi'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { deleteTaskApi, updateTodoApi } from '../apis/tasksapi'
 // import e from 'express'
 
 interface Props {
-  tasks: any
+  tasks: models.Task[]
+}
+
+const emptyTask = {
+  id: 0,
+  priority: 0,
+  task: '',
+  task_Details: '',
+  completed: false,
 }
 
 function Task(prop: Props) {
-  // const [allTasks, setAllTask] = useState(prop.tasks)
   const [editMode, setEditMode] = useState(false)
-  const [edittedTask, setEdittedTask] = useState('')
+  const [edittedTask, setEdittedTask] = useState(emptyTask)
 
   const mutateDeleteTask = useMutation({
     mutationFn: (id: number) => deleteTaskApi(id),
@@ -42,7 +49,7 @@ function Task(prop: Props) {
   }
 
   function handleCompleteClick(task: models.Task) {
-    const completedTask = { ...task, completed: true }
+    const completedTask = { ...task, completed: !task.completed }
     mutateCompleteTask.mutate(completedTask)
   }
 
@@ -54,43 +61,39 @@ function Task(prop: Props) {
     mutateUpdateTask.mutate(updatedTask)
     e.currentTarget.reset()
     setEditMode(false)
-    // setEdittedTask(updatedTask)
-    // await updateTodoApi(updatedTask)
   }
 
-  function handleEditClick(task) {
+  function handleEditClick(task: models.Task) {
     setEditMode(!editMode)
     setEdittedTask(task)
     console.log(task.id)
   }
 
   function createMappedData() {
-    return allTasks.map((task: models.Task) =>
-      task.completed == false ? (
-        <div key={task.id}>
-          <li key={task.id}>
-            <div className="view">
-              <input
-                onClick={() => handleCompleteClick(task)}
-                className="toggle"
-                type="checkbox"
-              />
-              <label onDoubleClick={() => handleEditClick(task)}>
-                {task.task}
-              </label>
-              <button
-                onClick={(e) => handleClick(e, task.id)}
-                className="destroy"
-              ></button>
-            </div>
-            <input className="edit" value="Rule the web" />
-          </li>
-        </div>
-      ) : null
-    )
+    return allTasks.map((task: models.Task) => (
+      <div key={task.id}>
+        <li key={task.id}>
+          <div className="view">
+            <input
+              onClick={() => handleCompleteClick(task)}
+              className="toggle"
+              type="checkbox"
+              defaultChecked={task.completed}
+            />
+            <label onDoubleClick={() => handleEditClick(task)}>
+              {task.task}
+            </label>
+            <button
+              onClick={(e) => handleClick(e, task.id)}
+              className="destroy"
+            ></button>
+          </div>
+          <input className="edit" value="Rule the web" />
+        </li>
+      </div>
+    ))
   }
 
-  // console.log(allTasks)
   return editMode ? (
     <>
       <form onSubmit={handleSubmit}>

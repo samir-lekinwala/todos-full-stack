@@ -1,31 +1,34 @@
-import { useQuery } from '@tanstack/react-query'
-import { getAllTasksApi } from '../apis/tasksapi'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Task } from '../models/TasksModel'
+import { deleteTaskApi } from '../apis/tasksapi'
 
 interface Props {
-  tasks: Task
+  tasks: Task[]
 }
 
 function Footer(props: Props) {
   const data = props.tasks
-  console.log(data)
-  // const {
-  //   data: tasks,
-  //   isLoading,
-  //   isError,
-  //   error,
-  // } = useQuery({
-  //   queryKey: ['tasks'],
-  //   queryFn: getAllTasksApi,
-  // })
-  // if (isLoading) return <h1>Loading...</h1>
-  // if (isError) return console.error(error)
 
   function taskRemaining() {
     const filtered = data.filter((x: Task) => x.completed == false)
     return filtered.length
   }
   taskRemaining()
+
+  const mutateDeleteTask = useMutation({
+    mutationFn: (id: number) => deleteTaskApi(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['tasks'])
+    },
+  })
+  const queryClient = useQueryClient()
+
+  function handleClearCompleted() {
+    for (let i = 0; i < data.length; i++)
+      if (data[i].completed) {
+        mutateDeleteTask.mutate(data[i].id)
+      }
+  }
 
   return (
     <footer className="footer">
@@ -34,7 +37,7 @@ function Footer(props: Props) {
         <strong>{taskRemaining()}</strong> item left
       </span>
       {/* <!-- Remove this if you don't implement routing --> */}
-      <ul className="filters">
+      {/* <ul className="filters">
         <li>
           <a className="selected" href="#/">
             All
@@ -46,9 +49,11 @@ function Footer(props: Props) {
         <li>
           <a href="#/completed">Completed</a>
         </li>
-      </ul>
+      </ul> */}
       {/* <!-- Hidden if no completed items are left ↓ --> */}
-      <button className="clear-completed">Clear completed</button>
+      <button onClick={handleClearCompleted} className="clear-completed">
+        Clear completed
+      </button>
     </footer>
   )
 }
