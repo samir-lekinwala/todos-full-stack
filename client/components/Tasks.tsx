@@ -74,21 +74,30 @@ function Task(prop: Props) {
       <div key={task.id}>
         <li key={task.id}>
           <div className="view">
+            {/* <label className="hidden" htmlFor="checkbox">
+              dsa
+            </label> */}
             <input
+              id={`checkbox-${task.id}`}
               onClick={() => handleCompleteClick(task)}
               className="toggle"
               type="checkbox"
               defaultChecked={task.completed}
             />
-            <label onDoubleClick={() => handleEditClick(task)}>
+            <label
+              htmlFor={`checkbox-${task.id}`}
+              onDoubleClick={() => handleEditClick(task)}
+            >
               {task.task}
             </label>
             <button
               onClick={(e) => handleClick(e, task.id)}
-              className="destroy"
-            ></button>
+              className="destroy visually-hidden"
+            >
+              X
+            </button>
           </div>
-          <input className="edit" value="Rule the web" />
+          {/* <input className="edit" value="Rule the web" /> */}
         </li>
       </div>
     ))
