@@ -1,9 +1,10 @@
 import { UpdateTask } from '../../client/models/TasksModel.js'
-import knexfile from './knexfile.js'
-import knex from 'knex'
+// import knexfile from './knexfile.js'
+// import knex from 'knex'
 import * as models from '../../client/models/TasksModel.js'
+import connection from './connection'
 
-const db = knex(knexfile.development)
+const db = connection
 
 export function getTodos() {
   return db('tasks').select()
