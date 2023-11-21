@@ -1,14 +1,11 @@
 import * as models from '../models/TasksModel'
 import Tasks from './Tasks.tsx'
-import { useState } from 'react'
 
 interface Props {
   tasks: models.Task[]
 }
 
 function MainSection(props: Props) {
-  const [currentTask, setCurrentTask] = useState()
-
   const tasks = props.tasks
 
   return (

@@ -15,4 +15,11 @@ if (process.env.NODE_ENV === 'production') {
   })
 }
 
+if (process.env.NODE_ENV === 'production') {
+  server.use('/assets', express.static('../assets'))
+  server.get('*', (req, res) => {
+    res.sendFile('../index.html')
+  })
+}
+
 export default server
