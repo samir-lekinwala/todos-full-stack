@@ -1,22 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { deleteTaskApi } from '../apis/tasksapi'
 import { Task } from '../models/TasksModel'
+import { deleteTaskApi } from '../apis/tasksapi'
 
 interface Props {
-  tasks: Task
+  tasks: Task[]
 }
 
 function Footer(props: Props) {
   const data = props.tasks
-
-  const mutateDeleteTask = useMutation({
-    mutationFn: (id: number) => deleteTaskApi(id),
-    onSuccess: () => {
-      QueryClient.invalidateQueries(['tasks'])
-    },
-  })
-
-  const QueryClient = useQueryClient()
 
   function taskRemaining() {
     const filtered = data.filter((x: Task) => x.completed == false)
@@ -24,14 +15,19 @@ function Footer(props: Props) {
   }
   taskRemaining()
 
-  function removeCompletedTask() {
-    const filtered = data.filter((x: Task) => x.completed == true)
-    for (let i = 0; i < filtered.length; i++)
-      mutateDeleteTask.mutate(filtered[i].id)
-  }
+  const mutateDeleteTask = useMutation({
+    mutationFn: (id: number) => deleteTaskApi(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['tasks'])
+    },
+  })
+  const queryClient = useQueryClient()
 
-  function handleClearClick() {
-    removeCompletedTask()
+  function handleClearCompleted() {
+    for (let i = 0; i < data.length; i++)
+      if (data[i].completed) {
+        mutateDeleteTask.mutate(data[i].id)
+      }
   }
 
   return (
@@ -55,7 +51,7 @@ function Footer(props: Props) {
         </li>
       </ul> */}
       {/* <!-- Hidden if no completed items are left ↓ --> */}
-      <button onClick={() => handleClearClick()} className="clear-completed">
+      <button onClick={handleClearCompleted} className="clear-completed">
         Clear completed
       </button>
     </footer>

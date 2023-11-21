@@ -4,10 +4,10 @@ body {
   padding: 0;
 }
 
-#edittedTaskValue {
-  color: red;
-  border: 1px solid black;
+.visually-hidden {
+display: none;
 }
+
 
 button {
   margin: 0;
@@ -246,7 +246,7 @@ body {
 }
 
 .todo-list li .destroy:after {
-  content: "×";
+  content: "";
 }
 
 .todo-list li:hover .destroy {
