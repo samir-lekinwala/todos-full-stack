@@ -25,9 +25,7 @@ function AddTodo() {
 
   return (
     <>
-      <label className="hidden" htmlFor="new-todo">
-        Add new Todo
-      </label>
+      <label htmlFor="new-todo">Add new Todo</label>
       <form onSubmit={handleSubmit}>
         <input
           id="new-todo"
